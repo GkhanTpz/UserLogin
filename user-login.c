@@ -18,7 +18,7 @@ int main(){
             break;
         }
         
-        if(strcmp(defuser,user) != 0 && defpass != password) // kullanıcı adı ve şifre hatalı ise;
+        if((strcmp(defuser,user) != 0 && defpass != password) || (strcmp(defuser,user) != 0 && defpass == password)) // kullanıcı adı ve şifre hatalı ise;
             userCheck(FAILED1); // kullanıcı bilgilerinin hatalı olduğunu fonksiyona bildirir.
 
         if(strcmp(defuser,user) == 0 && defpass != password) // girilen şifre hatalı ise;
