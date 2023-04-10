@@ -10,20 +10,20 @@ int main()
     while(true)
     {
         printf ("%s","Enter username:");
-        scanf("%s",user);
+        scanf("%s",username);
 
         printf("%s","Enter password: ");
         scanf ("%d",&password);
 
-        if(strcmp(defuser,user) == 0 && defpass == password) // giriş başarılı ise;
+        if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD == password) // giriş başarılı ise;
         {
             userCheck(LOGIN_SUCCESS); // kullanıcı bilgileri doğru ise fonksiyona girişin başarılı olduğu bildirilir.
             break;
         }
-        else if((strcmp(defuser,user) != 0 && defpass != password) || (strcmp(defuser,user) != 0 && defpass == password)) // kullanıcı adı ve şifre hatalı ise;
+        else if((strcmp(DEFAULT_USERNAME,username) != 0 && DEFAULT_PASSWORD != password) || (strcmp(DEFAULT_USERNAME,username) != 0 && DEFAULT_PASSWORD == password)) // kullanıcı adı ve şifre hatalı ise;
             userCheck(LOGIN_FAILURE_BAD_CREDENTIALS); // kullanıcı bilgilerinin hatalı olduğunu fonksiyona bildirir.
 
-        else if(strcmp(defuser,user) == 0 && defpass != password) // girilen şifre hatalı ise;
+        else if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD != password) // girilen şifre hatalı ise;
             userCheck(LOGIN_FAILURE_BAD_PASSWORD); // kullanıcı tarafından girilen şifresinin hatalı olduğunu fonksiyona bildirir.
     }
 #else
