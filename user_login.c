@@ -4,7 +4,6 @@
 
 int main()
 {
-
     printf ("%s","Welcome!\n");
 
 #ifdef LOGIN_STATUS_H
@@ -21,7 +20,6 @@ int main()
             userCheck(LOGIN_SUCCESS); // kullanıcı bilgileri doğru ise fonksiyona girişin başarılı olduğu bildirilir.
             break;
         }
-
         else if((strcmp(defuser,user) != 0 && defpass != password) || (strcmp(defuser,user) != 0 && defpass == password)) // kullanıcı adı ve şifre hatalı ise;
             userCheck(LOGIN_FAILURE_BAD_CREDENTIALS); // kullanıcı bilgilerinin hatalı olduğunu fonksiyona bildirir.
 
