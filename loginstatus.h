@@ -3,6 +3,10 @@
 #include <string.h>
 #define LOGIN_STATUS_H
 
+#define MAX_USERNAME_LENGTH 15
+#define DEFAULT_USERNAME "gokhan"
+int DEFAULT_PASSWORD = 1234;
+
 typedef enum {
     LOGIN_SUCCESS,
     LOGIN_FAILURE_BAD_CREDENTIALS,
@@ -11,8 +15,8 @@ typedef enum {
     } LoginStatus;// LoginStatus sadece LOGIN_SUCCESS, LOGIN_FAILURE_BAD_CREDENTIALS, LOGIN_FAILURE_BAD_PASSWORD, LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED değerini alabilir.
 
 
-int password, newpass, defpass=1234;
-char answer, user[15], defuser[15]="gokhan";
+int password, new_password;
+char response, username[MAX_USERNAME_LENGTH];
 
 void userCheck(LoginStatus Login) // kullanıcı girişini kontrol eden fonksiyon
 {
@@ -20,7 +24,7 @@ void userCheck(LoginStatus Login) // kullanıcı girişini kontrol eden fonksiyo
     {
         if(Login == LOGIN_SUCCESS)
         {
-            printf("Successful login. Welcome, %s!\n",user);
+            printf("Successful login. Welcome, %s!\n",username);
             break;
         }
         else if(Login == LOGIN_FAILURE_BAD_CREDENTIALS)
@@ -31,13 +35,13 @@ void userCheck(LoginStatus Login) // kullanıcı girişini kontrol eden fonksiyo
         else if(Login == LOGIN_FAILURE_BAD_PASSWORD)
         {
             printf("%s","Invalid password. Do you want to change your password? (y/n)\n");
-            scanf(" %c",&answer);
+            scanf(" %c",&response);
 
-            if (answer == 'Y' || answer == 'y')
+            if (response == 'Y' || response == 'y')
             {
                 printf ("%s","Enter new password: ");
-                scanf("%d",&newpass);
-                defpass = newpass;
+                scanf("%d",&new_password);
+                DEFAULT_PASSWORD = new_password;
                 printf("%s","Password changed successfully.\n");
             }
             else
