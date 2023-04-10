@@ -27,7 +27,7 @@ int main()
             userCheck(LOGIN_FAILURE_BAD_PASSWORD); // kullanıcı tarafından girilen şifresinin hatalı olduğunu fonksiyona bildirir.
     }
 #else
-    printf("ControlUser.h is not defined or not located");
+    printf("loginstatus.h is not defined or not located");
 #endif // LOGIN_STATUS_H
 
     return 0;
