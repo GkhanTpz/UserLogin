@@ -7,18 +7,21 @@
 #define DEFAULT_USERNAME "gokhan"
 int DEFAULT_PASSWORD = 1234;
 
-typedef enum {
+//This declarates if username and password entered by user is true or not 
+typedef enum
+{
     LOGIN_SUCCESS,
     LOGIN_FAILURE_BAD_CREDENTIALS,
     LOGIN_FAILURE_BAD_PASSWORD,
     LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED
-    } LoginStatus;// LoginStatus sadece LOGIN_SUCCESS, LOGIN_FAILURE_BAD_CREDENTIALS, LOGIN_FAILURE_BAD_PASSWORD, LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED değerini alabilir.
+}LoginStatus;
 
 
 int password, new_password;
 char response, username[MAX_USERNAME_LENGTH];
 
-void userCheck(LoginStatus Login) // kullanıcı girişini kontrol eden fonksiyon
+// The Function checking username and password
+void userCheck(LoginStatus Login)
 {
     while (true)
     {
