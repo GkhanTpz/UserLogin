@@ -7,7 +7,7 @@
 #define DEFAULT_USERNAME "gokhan"
 int DEFAULT_PASSWORD = 1234;
 
-//This declarates if username and password entered by user is true or not 
+//This declares if username and password entered by user is true or not
 typedef enum
 {
     LOGIN_SUCCESS,
