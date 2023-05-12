@@ -17,7 +17,7 @@ int main()
 
         if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD == password) // If username entered user is true
         {
-            userCheck(LOGIN_SUCCESS); // This declarate the function that user info is true
+            userCheck(LOGIN_SUCCESS); // This declares the function that user info is true
             break;
         }
         // If username and password entered by user is false
@@ -25,7 +25,7 @@ int main()
             userCheck(LOGIN_FAILURE_BAD_CREDENTIALS); // This declarate the function that user info is false
 
         else if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD != password) // If password entered user is false
-            userCheck(LOGIN_FAILURE_BAD_PASSWORD); // This declarate the function that password entered by user is false
+            userCheck(LOGIN_FAILURE_BAD_PASSWORD); // This declares the function that password entered by user is false
     }
 #else
     printf("loginstatus.h is not defined or not located");
