@@ -1,5 +1,3 @@
----
-
 # 🔒 Simple Login System in C
 
 This is a beginner-friendly login system written in C. It allows users to authenticate with predefined credentials, provides feedback for different login scenarios, and includes a password reset option for incorrect password entries. This project demonstrates the use of enums, functions, and basic string handling in C.
@@ -188,6 +186,6 @@ gcc login.c -o login
 ./login
 ```
 
-📝 License
+## 📝 **License**
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
