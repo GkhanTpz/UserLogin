@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -10,7 +10,7 @@ int main()
     char username[256];
     char password[256];
     char cmd[512];
-    char result[10];
+    char result[15];
     FILE* fp;
 
     printf ("%s","Welcome!\n");
@@ -27,7 +27,7 @@ int main()
         password[strcspn(password, "\n")] = 0;  // remove newline
 
         // Prepare the shell command
-        snprintf(cmd, sizeof(cmd), "./user_checker.sh \"%s\" \"%s\"", username, password);
+        snprintf(cmd, sizeof(cmd), "bash user_checker.sh \"%s\" \"%s\"", username, password);
 
         // Execute the script and read the result
         fp = popen(cmd, "r");
