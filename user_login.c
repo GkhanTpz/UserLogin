@@ -1,31 +1,62 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 #include "loginstatus.h" // This library checks username and password entered by user
 
 
 int main()
 {
+    char username[256];
+    char password[256];
+    char cmd[512];
+    char result[10];
+    FILE* fp;
+
     printf ("%s","Welcome!\n");
 
 #ifdef LOGIN_STATUS_H
     while(true)
     {
-        printf ("%s","Enter username:");
-        scanf("%s",username);
+        printf ("%s","Enter username: ");
+        fgets(username, sizeof(username), stdin);
+        username[strcspn(username, "\n")] = 0;  // remove newline
 
         printf("%s","Enter password: ");
-        scanf ("%d",&password);
+        fgets(password, sizeof(password), stdin);
+        password[strcspn(password, "\n")] = 0;  // remove newline
 
-        if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD == password) // If username entered user is true
-        {
-            userCheck(LOGIN_SUCCESS); // This declares the function that user info is true
+        // Prepare the shell command
+        snprintf(cmd, sizeof(cmd), "./user_checker.sh \"%s\" \"%s\"", username, password);
+
+        // Execute the script and read the result
+        fp = popen(cmd, "r");
+        if (fp == NULL) {
+            perror("Failed to run script");
+            return 1;
+        }
+
+        fgets(result, sizeof(result), fp);
+        pclose(fp);
+
+        // Remove newline from result
+        result[strcspn(result, "\n")] = 0;
+
+        // Interpret script result
+        if (strcmp(result, "true") == 0) {
+            UserCheck(LOGIN_SUCCESS, username);
             break;
         }
-        // If username and password entered by user is false
-        else if((strcmp(DEFAULT_USERNAME,username) != 0 && DEFAULT_PASSWORD != password) || (strcmp(DEFAULT_USERNAME,username) != 0 && DEFAULT_PASSWORD == password))
-            userCheck(LOGIN_FAILURE_BAD_CREDENTIALS); // This declarate the function that user info is false
-
-        else if(strcmp(DEFAULT_USERNAME,username) == 0 && DEFAULT_PASSWORD != password) // If password entered user is false
-            userCheck(LOGIN_FAILURE_BAD_PASSWORD); // This declares the function that password entered by user is false
+        else if (strcmp(result, "bad_password") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_PASSWORD, username);
+        }
+        else if (strcmp(result, "bad_username") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_CREDENTIALS, username);
+        }
+        else {
+            printf("Unknown error occurred.\n");
+            break;
+        }
     }
 #else
     printf("loginstatus.h is not defined or not located");
