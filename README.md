@@ -62,7 +62,7 @@ Handles the result of the login attempt and interacts with the user based on the
 
     case LOGIN_FAILURE_BAD_PASSWORD:
         printf("❌ Invalid password. Do you want to change your password? (y/n): ");
-        sfgets(response_str, sizeof(response_str), stdin); // Read input from the user, including spaces and newline
+        fgets(response_str, sizeof(response_str), stdin); // Read input from the user, including spaces and newline
         response_str[strcspn(response_str, "\n")] = 0; // Remove the newline character at the end of the input
 
         char response = response_str[0]; // Take the first character from the input (like 'y' or 'n')
