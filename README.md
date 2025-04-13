@@ -178,7 +178,7 @@ Enter username: Gokhan
 Enter password: 1111
 Incorrect password. Do you want to change your password? (y/n): y
 Enter new password: 5678
-Password changed successfully.
+Password changed (simulated). It will not persist after restart.
 ```
 
 ### 3️⃣ Invalid Username
