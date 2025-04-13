@@ -50,22 +50,40 @@ typedef enum {
 Handles the result of the login attempt and interacts with the user based on the login status.
 
 ```c
-void userCheck(LoginStatus status, const char* username) {
-    switch (Login) {
-        case LOGIN_SUCCESS:
-            printf("Login successful. Welcome!\n");
-            break;
-        case LOGIN_FAILURE_BAD_CREDENTIALS:
-            printf("Invalid username. Please try again.\n");
-            break;
-        case LOGIN_FAILURE_BAD_PASSWORD:
-            printf("Incorrect password. Do you want to change your password? (y/n): ");
-            break;
-        case LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED:
-            printf("Password change requested.\n");
-            break;
-        default:
-            printf("Unknown error.\n");
+void UserCheck(LoginStatus status, const char* username)
+{
+    switch (status)
+    {
+    case LOGIN_SUCCESS:
+        printf("✅ Successful login. Welcome, %s!\n", username);
+        break;
+
+    case LOGIN_FAILURE_BAD_CREDENTIALS:
+        printf("❌ Invalid username. Please try again.\n");
+        break;
+
+    case LOGIN_FAILURE_BAD_PASSWORD:
+        printf("❌ Invalid password. Do you want to change your password? (y/n): ");
+        scanf(" %c", &response);
+
+        if (response == 'y' || response == 'Y')
+        {
+            printf("Enter new password: ");
+            scanf("%s", new_password);
+
+            // Not actually saving — just demo!
+            printf("🔐 Password changed (simulated). It will not persist after restart.\n");
+            // Real implementation: hash new_password and save it
+        }
+        else
+        {
+            printf("🔁 Password change not requested. Try again.\n");
+        }
+        break;
+
+    default:
+        printf("⚠️ Unknown login status.\n");
+        break;
     }
 }
 ```
