@@ -96,48 +96,57 @@ Handles the result of the login attempt and interacts with the user based on the
 The `main()` function drives the logic of the program.
 
 ```c
-int main() {
-    char username[MAX_USERNAME_LENGTH];
-    int password;
+while(true)
+    {
+        printf ("%s","Enter username: ");
+        fgets(username, sizeof(username), stdin);
+        username[strcspn(username, "\n")] = 0;  // remove newline
 
-    printf("Enter username: ");
-    scanf("%s", username);
-    printf("Enter password: ");
-    scanf("%d", &password);
+        printf("%s","Enter password: ");
+        fgets(password, sizeof(password), stdin);
+        password[strcspn(password, "\n")] = 0;  // remove newline
 
-    if (strcmp(username, DEFAULT_USERNAME) == 0) {
-        if (password == DEFAULT_PASSWORD) {
-            userCheck(LOGIN_SUCCESS);
-        } else {
-            userCheck(LOGIN_FAILURE_BAD_PASSWORD);
+        // Prepare the shell command
+        snprintf(cmd, sizeof(cmd), "./user_checker.sh \"%s\" \"%s\"", username, password);
 
-            char resetOption;
-            scanf(" %c", &resetOption);
-
-            if (resetOption == 'y' || resetOption == 'Y') {
-                userCheck(LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED);
-
-                printf("Enter new password: ");
-                scanf("%d", &DEFAULT_PASSWORD);
-
-                printf("Password changed successfully.\n");
-            }
+        // Execute the script and read the result
+        fp = popen(cmd, "r");
+        if (fp == NULL) {
+            perror("Failed to run script");
+            return 1;
         }
-    } else {
-        userCheck(LOGIN_FAILURE_BAD_CREDENTIALS);
-    }
 
-    return 0;
-}
+        fgets(result, sizeof(result), fp);
+        pclose(fp);
+
+        // Remove newline from result
+        result[strcspn(result, "\n")] = 0;
+
+        // Interpret script result
+        if (strcmp(result, "true") == 0) {
+            UserCheck(LOGIN_SUCCESS, username);
+            break;
+        }
+        else if (strcmp(result, "bad_password") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_PASSWORD, username);
+        }
+        else if (strcmp(result, "bad_username") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_CREDENTIALS, username);
+        }
+        else {
+            printf("Unknown error occurred.\n");
+            break;
+        }
+    }
 ```
 
 - Prompts the user for a username and password.
-- Uses `strcmp()` to compare the input username with `DEFAULT_USERNAME`.
+- Uses `strcmp()` to compare the input username with `result` taken by `user_checker.sh`.
 - If the username matches:
   - Checks the password.
   - If the password is incorrect, prompts for a reset option (`y`/`n`).
 - If the username doesn't match, it prompts for re-entry.
-- Password reset updates the `DEFAULT_PASSWORD` variable.
+- Password reset updates the `new_password` variable.
 
 ---
 
