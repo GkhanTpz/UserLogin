@@ -17,7 +17,7 @@ const char DEFAULT_PASSWORD_HASH[65] = "03ac674216f3e15c761ee1a5e255f067953623c8
 ```
 
 - **`MAX_USERNAME_LENGTH` and `MAX_PASSWORD_LENGTH`**: Sets a limit of 50 characters for the username and the password input to prevent buffer overflow issues.
-- **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD`**: These represent the hardcoded credentials that the system checks against user input.
+- **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD_HASH`**: These represent the hardcoded credentials that the system checks against user input.
 
 ---
 
