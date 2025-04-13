@@ -9,7 +9,7 @@ This is a beginner-friendly login system written in C. It allows users to authen
 ### 📝 Predefined Constants
 
 ```c
-define MAX_USERNAME_LENGTH 50
+#define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 
 const char DEFAULT_USERNAME[MAX_USERNAME_LENGTH] = "Gokhan";
