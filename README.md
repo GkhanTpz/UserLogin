@@ -166,7 +166,7 @@ while(true)
 ### 1️⃣ Successful Login
 
 ```plaintext
-Enter username: gokhan
+Enter username: Gokhan
 Enter password: 1234
 Login successful. Welcome!
 ```
@@ -174,7 +174,7 @@ Login successful. Welcome!
 ### 2️⃣ Invalid Password and Reset
 
 ```plaintext
-Enter username: gokhan
+Enter username: Gokhan
 Enter password: 1111
 Incorrect password. Do you want to change your password? (y/n): y
 Enter new password: 5678
@@ -204,13 +204,13 @@ cd simple-login-system
 Use GCC or another C compiler:
 
 ```bash
-gcc login.c -o login
+gcc user_login.c -o user_login
 ```
 
 ### 3️⃣ Execute the Program
 
 ```bash
-./login
+./user_login
 ```
 
 ## 📝 **License**
