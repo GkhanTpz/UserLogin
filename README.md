@@ -175,7 +175,10 @@ Successful login. Welcome, Gokhan!
 ```plaintext
 Enter username: john
 Enter password: 1234
-### 2️⃣ Invalid Username.
+Invalid username. Please try again.
+```
+
+### 3️⃣ Invalid  Password and Reset
 
 ```plaintext
 Enter username: Gokhan
