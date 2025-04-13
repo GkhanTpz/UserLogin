@@ -181,13 +181,6 @@ Enter new password: 5678
 Password changed (simulated). It will not persist after restart.
 ```
 
-### 3️⃣ Invalid Username
-
-```plaintext
-Enter username: john
-Invalid username. Please try again.
-```
-
 ---
 
 ## 💻 How to Run the Program
