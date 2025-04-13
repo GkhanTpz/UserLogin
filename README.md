@@ -45,12 +45,12 @@ typedef enum {
 
 ### 📂 Functions Overview
 
-#### `userCheck(LoginStatus Login)`
+#### `userCheck(LoginStatus status, const char* username)`
 
 Handles the result of the login attempt and interacts with the user based on the login status.
 
 ```c
-void userCheck(LoginStatus Login) {
+void userCheck(LoginStatus status, const char* username) {
     switch (Login) {
         case LOGIN_SUCCESS:
             printf("Login successful. Welcome!\n");
