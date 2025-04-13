@@ -9,12 +9,14 @@ This is a beginner-friendly login system written in C. It allows users to authen
 ### 📝 Predefined Constants
 
 ```c
-#define MAX_USERNAME_LENGTH 15
-#define DEFAULT_USERNAME "gokhan"
-int DEFAULT_PASSWORD = 1234;
+define MAX_USERNAME_LENGTH 50
+#define MAX_PASSWORD_LENGTH 50
+
+const char DEFAULT_USERNAME[MAX_USERNAME_LENGTH] = "Gokhan";
+const char DEFAULT_PASSWORD_HASH[65] = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // hash of '1234'
 ```
 
-- **`MAX_USERNAME_LENGTH`**: Sets a limit of 15 characters for the username input to prevent buffer overflow issues.
+- **`MAX_USERNAME_LENGTH` and `MAX_PASSWORD_LENGTH`**: Sets a limit of 50 characters for the username and the password input to prevent buffer overflow issues.
 - **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD`**: These represent the hardcoded credentials that the system checks against user input.
 
 ---
