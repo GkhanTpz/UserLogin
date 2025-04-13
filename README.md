@@ -50,8 +50,6 @@ typedef enum {
 Handles the result of the login attempt and interacts with the user based on the login status.
 
 ```c
-void UserCheck(LoginStatus status, const char* username)
-{
     switch (status)
     {
     case LOGIN_SUCCESS:
