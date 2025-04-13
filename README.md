@@ -168,7 +168,7 @@ while(true)
 ```plaintext
 Enter username: Gokhan
 Enter password: 1234
-Login successful. Welcome, Gokhan!
+Successful login. Welcome, Gokhan!
 ```
 
 ### 2️⃣ Invalid Password and Reset
