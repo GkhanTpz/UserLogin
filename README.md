@@ -9,13 +9,15 @@ This is a beginner-friendly login system written in C. It allows users to authen
 ### 📝 Predefined Constants
 
 ```c
-#define MAX_USERNAME_LENGTH 15
-#define DEFAULT_USERNAME "gokhan"
-int DEFAULT_PASSWORD = 1234;
+#define MAX_USERNAME_LENGTH 50
+#define MAX_PASSWORD_LENGTH 50
+
+const char DEFAULT_USERNAME[MAX_USERNAME_LENGTH] = "Gokhan";
+const char DEFAULT_PASSWORD_HASH[65] = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // hash of '1234'
 ```
 
-- **`MAX_USERNAME_LENGTH`**: Sets a limit of 15 characters for the username input to prevent buffer overflow issues.
-- **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD`**: These represent the hardcoded credentials that the system checks against user input.
+- **`MAX_USERNAME_LENGTH` and `MAX_PASSWORD_LENGTH`**: Sets a limit of 50 characters for the username and the password input to prevent buffer overflow issues.
+- **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD_HASH`**: These represent the hardcoded credentials that the system checks against user input.
 
 ---
 
@@ -43,27 +45,43 @@ typedef enum {
 
 ### 📂 Functions Overview
 
-#### `userCheck(LoginStatus Login)`
+#### `userCheck(LoginStatus status, const char* username)`
 
 Handles the result of the login attempt and interacts with the user based on the login status.
 
 ```c
-void userCheck(LoginStatus Login) {
-    switch (Login) {
-        case LOGIN_SUCCESS:
-            printf("Login successful. Welcome!\n");
-            break;
-        case LOGIN_FAILURE_BAD_CREDENTIALS:
-            printf("Invalid username. Please try again.\n");
-            break;
-        case LOGIN_FAILURE_BAD_PASSWORD:
-            printf("Incorrect password. Do you want to change your password? (y/n): ");
-            break;
-        case LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED:
-            printf("Password change requested.\n");
-            break;
-        default:
-            printf("Unknown error.\n");
+    switch (status)
+    {
+    case LOGIN_SUCCESS:
+        printf("✅ Successful login. Welcome, %s!\n", username);
+        break;
+
+    case LOGIN_FAILURE_BAD_CREDENTIALS:
+        printf("❌ Invalid username. Please try again.\n");
+        break;
+
+    case LOGIN_FAILURE_BAD_PASSWORD:
+        printf("❌ Invalid password. Do you want to change your password? (y/n): ");
+        scanf(" %c", &response);
+
+        if (response == 'y' || response == 'Y')
+        {
+            printf("Enter new password: ");
+            scanf("%s", new_password);
+
+            // Not actually saving — just demo!
+            printf("🔐 Password changed (simulated). It will not persist after restart.\n");
+            // Real implementation: hash new_password and save it
+        }
+        else
+        {
+            printf("🔁 Password change not requested. Try again.\n");
+        }
+        break;
+
+    default:
+        printf("⚠️ Unknown login status.\n");
+        break;
     }
 }
 ```
@@ -78,48 +96,57 @@ void userCheck(LoginStatus Login) {
 The `main()` function drives the logic of the program.
 
 ```c
-int main() {
-    char username[MAX_USERNAME_LENGTH];
-    int password;
+while(true)
+    {
+        printf ("%s","Enter username: ");
+        fgets(username, sizeof(username), stdin);
+        username[strcspn(username, "\n")] = 0;  // remove newline
 
-    printf("Enter username: ");
-    scanf("%s", username);
-    printf("Enter password: ");
-    scanf("%d", &password);
+        printf("%s","Enter password: ");
+        fgets(password, sizeof(password), stdin);
+        password[strcspn(password, "\n")] = 0;  // remove newline
 
-    if (strcmp(username, DEFAULT_USERNAME) == 0) {
-        if (password == DEFAULT_PASSWORD) {
-            userCheck(LOGIN_SUCCESS);
-        } else {
-            userCheck(LOGIN_FAILURE_BAD_PASSWORD);
+        // Prepare the shell command
+        snprintf(cmd, sizeof(cmd), "./user_checker.sh \"%s\" \"%s\"", username, password);
 
-            char resetOption;
-            scanf(" %c", &resetOption);
-
-            if (resetOption == 'y' || resetOption == 'Y') {
-                userCheck(LOGIN_FAILURE_PASSWORD_CHANGE_REQUESTED);
-
-                printf("Enter new password: ");
-                scanf("%d", &DEFAULT_PASSWORD);
-
-                printf("Password changed successfully.\n");
-            }
+        // Execute the script and read the result
+        fp = popen(cmd, "r");
+        if (fp == NULL) {
+            perror("Failed to run script");
+            return 1;
         }
-    } else {
-        userCheck(LOGIN_FAILURE_BAD_CREDENTIALS);
-    }
 
-    return 0;
-}
+        fgets(result, sizeof(result), fp);
+        pclose(fp);
+
+        // Remove newline from result
+        result[strcspn(result, "\n")] = 0;
+
+        // Interpret script result
+        if (strcmp(result, "true") == 0) {
+            UserCheck(LOGIN_SUCCESS, username);
+            break;
+        }
+        else if (strcmp(result, "bad_password") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_PASSWORD, username);
+        }
+        else if (strcmp(result, "bad_username") == 0) {
+            UserCheck(LOGIN_FAILURE_BAD_CREDENTIALS, username);
+        }
+        else {
+            printf("Unknown error occurred.\n");
+            break;
+        }
+    }
 ```
 
 - Prompts the user for a username and password.
-- Uses `strcmp()` to compare the input username with `DEFAULT_USERNAME`.
+- Uses `strcmp()` to compare the input username with `result` taken by `user_checker.sh`.
 - If the username matches:
   - Checks the password.
   - If the password is incorrect, prompts for a reset option (`y`/`n`).
 - If the username doesn't match, it prompts for re-entry.
-- Password reset updates the `DEFAULT_PASSWORD` variable.
+- Password reset updates the `new_password` variable.
 
 ---
 
@@ -139,26 +166,26 @@ int main() {
 ### 1️⃣ Successful Login
 
 ```plaintext
-Enter username: gokhan
+Enter username: Gokhan
 Enter password: 1234
-Login successful. Welcome!
+Successful login. Welcome, Gokhan!
 ```
 
-### 2️⃣ Invalid Password and Reset
+### 2️⃣ Invalid Username
+```plaintext
+Enter username: john
+Enter password: 1234
+Invalid username. Please try again.
+```
+
+### 3️⃣ Invalid  Password and Reset
 
 ```plaintext
-Enter username: gokhan
+Enter username: Gokhan
 Enter password: 1111
 Incorrect password. Do you want to change your password? (y/n): y
 Enter new password: 5678
-Password changed successfully.
-```
-
-### 3️⃣ Invalid Username
-
-```plaintext
-Enter username: john
-Invalid username. Please try again.
+Password changed (simulated). It will not persist after restart.
 ```
 
 ---
@@ -177,13 +204,13 @@ cd simple-login-system
 Use GCC or another C compiler:
 
 ```bash
-gcc login.c -o login
+gcc user_login.c -o user_login
 ```
 
 ### 3️⃣ Execute the Program
 
 ```bash
-./login
+./user_login
 ```
 
 ## 📝 **License**
