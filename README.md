@@ -53,15 +53,15 @@ Handles the result of the login attempt and interacts with the user based on the
     switch (status)
     {
     case LOGIN_SUCCESS:
-        printf("✅ Successful login. Welcome, %s!\n", username);
+        printf("Successful login. Welcome, %s!\n", username);
         break;
 
     case LOGIN_FAILURE_BAD_CREDENTIALS:
-        printf("❌ Invalid username. Please try again.\n");
+        printf("Invalid username. Please try again.\n");
         break;
 
     case LOGIN_FAILURE_BAD_PASSWORD:
-        printf("❌ Invalid password. Do you want to change your password? (y/n): ");
+        printf("Invalid password. Do you want to change your password? (y/n): ");
         fgets(response_str, sizeof(response_str), stdin); // Read input from the user, including spaces and newline
         response_str[strcspn(response_str, "\n")] = 0; // Remove the newline character at the end of the input
 
@@ -73,17 +73,17 @@ Handles the result of the login attempt and interacts with the user based on the
             scanf("%s", new_password);
 
             // Not actually saving — just demo!
-            printf("🔐 Password changed (simulated). It will not persist after restart.\n");
+            printf("Password changed (simulated). It will not persist after restart.\n");
             // Real implementation: hash new_password and save it
         }
         else
         {
-            printf("🔁 Password change not requested. Try again.\n");
+            printf("Password change not requested. Try again.\n");
         }
         break;
 
     default:
-        printf("⚠️ Unknown login status.\n");
+        printf("Unknown login status.\n");
         break;
     }
 }
