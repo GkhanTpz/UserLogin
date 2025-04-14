@@ -4,11 +4,12 @@
 #include <stdbool.h>
 #include "loginstatus.h" // This library checks username and password entered by user
 
+// Define the global password
+char password[MAX_PASSWORD_LENGTH];
 
 int main()
 {
     char username[256];
-    char password[256];
     char cmd[512];
     char result[15];
     FILE* fp;
