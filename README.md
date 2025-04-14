@@ -6,18 +6,17 @@ This is a beginner-friendly login system written in C. It allows users to authen
 
 ## 🛠️ Code Explanation
 
-### 📝 Predefined Constants
+### 📝 Predefined and Global Variables
 
 ```c
-#define MAX_USERNAME_LENGTH 50
-#define MAX_PASSWORD_LENGTH 50
+#define MAX_PASSWORD_LENGTH 256
 
-const char DEFAULT_USERNAME[MAX_USERNAME_LENGTH] = "Gokhan";
-const char DEFAULT_PASSWORD_HASH[65] = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // hash of '1234'
+// Declare the global password variable (defined in user_login.c)
+extern char password[MAX_PASSWORD_LENGTH];
 ```
 
-- **`MAX_USERNAME_LENGTH` and `MAX_PASSWORD_LENGTH`**: Sets a limit of 50 characters for the username and the password input to prevent buffer overflow issues.
-- **`DEFAULT_USERNAME` and `DEFAULT_PASSWORD_HASH`**: These represent the hardcoded credentials that the system checks against user input.
+- **`MAX_PASSWORD_LENGTH`**: Sets a limit of 256 characters for the password input to prevent buffer overflow issues.
+- **`password[MAX_PASSWORD_LENGTH]`**: Declare the global password variable (defined in user_login.c).
 
 ---
 
@@ -51,41 +50,51 @@ Handles the result of the login attempt and interacts with the user based on the
 
 ```c
     switch (status)
+{
+case LOGIN_SUCCESS:
+    printf("Successful login. Welcome, %s!\n", username);
+    break;
+
+case LOGIN_FAILURE_BAD_CREDENTIALS:
+    printf("Invalid username. Please try again.\n");
+    break;
+
+case LOGIN_FAILURE_BAD_PASSWORD:
+    printf("Invalid password. Do you want to change your password? (y/n): ");
+    fgets(response_str, sizeof(response_str), stdin); // Read input from the user, including spaces and newline
+    response_str[strcspn(response_str, "\n")] = 0; // Remove the newline character at the end of the input
+
+    char response = response_str[0]; // Take the first character from the input (like 'y' or 'n')
+
+    if (response == 'y' || response == 'Y')
     {
-    case LOGIN_SUCCESS:
-        printf("Successful login. Welcome, %s!\n", username);
-        break;
+        printf("Enter new password: ");
+        fgets(new_password, sizeof(new_password), stdin);
+        new_password[strcspn(new_password, "\n")] = 0;
+       
+        // Save hashed password to file
+        char hash_cmd[512];
+        snprintf(hash_cmd, sizeof(hash_cmd), "printf \"%%s\" \"%s\" | sha256sum | awk '{print $1}' > password.txt", new_password);
+        int status = system(hash_cmd);
 
-    case LOGIN_FAILURE_BAD_CREDENTIALS:
-        printf("Invalid username. Please try again.\n");
-        break;
-
-    case LOGIN_FAILURE_BAD_PASSWORD:
-        printf("Invalid password. Do you want to change your password? (y/n): ");
-        fgets(response_str, sizeof(response_str), stdin); // Read input from the user, including spaces and newline
-        response_str[strcspn(response_str, "\n")] = 0; // Remove the newline character at the end of the input
-
-        char response = response_str[0]; // Take the first character from the input (like 'y' or 'n')
-
-        if (response == 'y' || response == 'Y')
-        {
-            printf("Enter new password: ");
-            scanf("%s", new_password);
-
-            // Not actually saving — just demo!
-            printf("Password changed (simulated). It will not persist after restart.\n");
-            // Real implementation: hash new_password and save it
+        if (status == 0) {
+            strncpy(password, new_password, MAX_PASSWORD_LENGTH);
+            password[MAX_PASSWORD_LENGTH - 1] = '\0';
+            printf("Password changed and saved successfully.\n");
         }
-        else
-        {
-            printf("Password change not requested. Try again.\n");
-        }
-        break;
-
-    default:
-        printf("Unknown login status.\n");
-        break;
+        else {
+            printf("Failed to save the new password.\n");
+        } 
     }
+    else
+    {
+        printf("Password change not requested. Try again.\n");
+    }
+    break;
+
+default:
+    printf("Unknown login status.\n");
+    break;
 }
 ```
 
@@ -188,7 +197,7 @@ Enter username: Gokhan
 Enter password: 1111
 Incorrect password. Do you want to change your password? (y/n): y
 Enter new password: 5678
-Password changed (simulated). It will not persist after restart.
+Password changed and saved successfully.
 ```
 
 ---
