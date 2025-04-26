@@ -119,7 +119,7 @@ while(true)
         password[strcspn(password, "\n")] = 0;  // remove newline
 
         // Prepare the shell command
-        snprintf(cmd, sizeof(cmd), "./user_checker.sh \"%s\" \"%s\"", username, password);
+        snprintf(cmd, sizeof(cmd), "bash user_checker.sh \"%s\" \"%s\"", username, password);
 
         // Execute the script and read the result
         fp = popen(cmd, "r");
